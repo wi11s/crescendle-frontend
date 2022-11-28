@@ -1,47 +1,59 @@
-import logo from '../logo.svg';
 import '../App.css';
-import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
 import 'react-piano/dist/styles.css';
-
-import Abcjs from './Abcjs';
+import { Routes, Route } from 'react-router-dom';
+import Daily from './Daily';
+import NotFound from './NotFound';
+import Profile from './Profile';
+import Practice from './Practice';
+import Header from './Header';
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [user, setUser] = useState(null);
 
-  // keyboard
-
-  const firstNote = MidiNumbers.fromNote('c3');
-  const lastNote = MidiNumbers.fromNote('f4');
-  const keyboardShortcuts = KeyboardShortcuts.create({
-    firstNote: firstNote,
-    lastNote: lastNote,
-    keyboardConfig: KeyboardShortcuts.HOME_ROW,
-  });
+  useEffect(() => {
+    fetch("/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      }
+    })
+    .then((r) => {
+      console.log(r)
+      if (r.ok) {
+        r.json()
+        .then((user) => setUser(user));
+      } else {
+        fetch('/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+          })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+          if (data.user) {
+            localStorage.setItem("jwt", data.token);
+            setUser(data);
+          } else {
+            alert(data.message)
+          }
+        })
+      }
+    })
+    .then()
+  }, [localStorage.getItem("jwt")]);
 
   return (
     <div className="App">
-      <Abcjs
-        abcNotation={
-          'X:1\nT:Example\nM:4/4\nC:Trad.\nK:G\n|:Gccc dedB|dedB dedB|c2ec B2dB|c2A2 A2BA|'
-        }
-        parserParams={{}}
-        engraverParams={{ responsive: 'resize' }}
-        renderParams={{ viewportHorizontal: true }}
-      />
-
-      <div id="paper"></div>
-      
-      <Piano
-      noteRange={{ first: firstNote, last: lastNote }}
-      playNote={(midiNumber) => {
-        // Play a given note - see notes below
-      }}
-      stopNote={(midiNumber) => {
-        // Stop playing a given note - see notes below
-      }}
-      width={1000}
-      keyboardShortcuts={keyboardShortcuts}
-
-    />
+      <Header />
+      <Routes>
+        <Route path="/" element={<Daily/>} />
+        <Route path="/practice" element={<Practice/>} />
+        <Route path="*" element={<NotFound />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </div>
   );
 }

@@ -37,3 +37,11 @@
     transform: rotate(360deg);
   }
 }
+
+.btnSelected {
+  background-color: #61dafb;
+}
+
+.btn:hover {
+  background-color: #3d8a9f;
+}
