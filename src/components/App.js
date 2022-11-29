@@ -44,6 +44,7 @@ function App() {
     })
     .then()
   }, [localStorage.getItem("jwt")]);
+  
 
   return (
     <div className="App">

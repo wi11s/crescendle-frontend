@@ -4,12 +4,10 @@ import 'react-piano/dist/styles.css';
 import NoteTypes from './NoteTypes';
 import PreviousGuesses from './PreviousGuesses';
 import Soundfont from 'soundfont-player';
+import stringSimilarity from 'string-similarity';
 
-import Abcjs from './Abcjs';
-// import ABCJS from 'abcjs';
+// import Abcjs from './Abcjs';
 
-// import 'font-awesome/css/font-awesome.min.css';
-// import 'abcjs/abcjs-midi.css';
 import abcjs from 'abcjs';
 
 function Daily() {
@@ -19,15 +17,18 @@ function Daily() {
 
   const [key, setKey] = useState('C');
   const [timeSignature, setTimeSignature] = useState('4/4');
-  const [firstMeasure, setFirstMeasure] = useState('');
+  const [firstMeasure, setFirstMeasure] = useState('G2');
   const [secondMeasure, setSecondMeasure] = useState('');
   const [thirdMeasure, setThirdMeasure] = useState('');
   const [fourthMeasure, setFourthMeasure] = useState('');
   const [noteType, setNoteType] = useState('2');
   const [tempoInMs, setTempoInMs] = useState(0);
   const [bpm, setBpm] = useState(120);
+  const [visualNote, setVisualNote] = useState({});
+  const [accuracy, setAccuracy] = useState(null);
 
-  const [space, setSpace] = useState(0);
+
+  const [space, setSpace] = useState(1);
 
   // put together abc notation
 
@@ -69,6 +70,8 @@ function Daily() {
   }, [])
 
   let remainingSpace;
+
+  // add note to staff
 
   function handlePress(midiNumber) {
     // z is rest
@@ -196,7 +199,7 @@ function Daily() {
     let onThird = false
     let onFourth = false
 
-    console.log('space for use: ', spaceForUse)
+    // console.log('space for use: ', spaceForUse)
 
     if (spaceForUse <= 4) {
       onFirst = true
@@ -215,7 +218,7 @@ function Daily() {
     }
 
     if (moveForward) {
-      if (Number.isInteger(space) && (space%2)==0) {
+      if ((Number.isInteger(space) && (space%2)==0) || (Number.isInteger(space) && noteType==='/')) {
         if (onFirst) {
           let updatedMeasure = `${firstMeasure}`+` ${midiToNotes[midiNumber]}${noteType}`;
           setFirstMeasure(updatedMeasure);
@@ -245,17 +248,45 @@ function Daily() {
         }
       }
     }
+
+    // let lastNote;
+
+    // document.querySelectorAll('path').forEach((path) => {
+    //   if (path.className.baseVal === 'abcjs-stem') {
+    //     // console.log(path.parentElement.className)
+    //     // path.parentElement.className = 
+        
+    //     // console.log(typeof path.parentElement)
+    //     // setVisualNotes(path.parentElement)
+    //     // path.parentElement.id = ''
+    //     lastNote = path.parentElement
+    //   }
+    // })
+
+    // lastNote.id = `midi${midiNumber}`
+    // console.log(lastNote.parentElement)
+
   }
 
   // audio
 
   const synth = new abcjs.synth.CreateSynth();
 
-  const visualObj = abcjs.renderAbc("paper", abc);
+  const visualObj = abcjs.renderAbc(
+    "paper", 
+    abc, 
+    { dragging: true, 
+      clickListener: function (ev) {
+        // dragging function
+        console.log(ev)
+      }
+    }
+  );
 
   function calculateTempo() {
     setTempoInMs(240000/bpm)
   }
+  
   let running;
   function play() {
     calculateTempo()
@@ -284,7 +315,17 @@ function Daily() {
     synth.stop()
   }
 
-  console.log(abc)
+  // console.log(document.querySelector('#midi60'))
+
+  // handle guess
+
+  function handleGuess() {
+    let todaysAbc = '|:G2cc dedB|dedB dedB|c2ec B2dB|c2A2 A2BA|'.replace(/\s+/g, '')
+    console.log(todaysAbc, 'abc:', abc.slice(28).replace(/\s+/g, ''))
+    console.log(stringSimilarity.compareTwoStrings(abc.slice(28).replace(/\s+/g, ''), todaysAbc))
+    setAccuracy(stringSimilarity.compareTwoStrings(abc.slice(28).replace(/\s+/g, ''), todaysAbc))
+
+  }
 
   return (
     <div className="daily">
@@ -292,6 +333,14 @@ function Daily() {
       <button onClick={stop}>Stop</button>
 
       <div id="paper"></div>
+      <button onClick={() => {
+        setFirstMeasure('')
+        setSecondMeasure('')
+        setThirdMeasure('')
+        setFourthMeasure('')
+      }}>reset</button>
+      <button onClick={handleGuess}>guess</button>
+      <h3>accuracy: {accuracy}</h3>
 
       <NoteTypes setNoteType={setNoteType}></NoteTypes>
       
