@@ -35,14 +35,9 @@ function Daily({ user }) {
   const [guesses, setGuesses] = useState([]);
   const [todaysAbc, setTodaysAbc] = useState('');
   const [song, setSong] = useState({});
-  
-  useEffect(() => {
-    if (user) {
-      setGuesses(user.guesses);
-    }
-  }, [user])
+  const [numberOfPlays, setNumberOfPlays] = useState(0);
 
-  // get daily challenge
+  // initial load: get daily challenge and guesses and number of plays
 
   useEffect(() => {
     if (user) {
@@ -53,12 +48,38 @@ function Daily({ user }) {
         }
       })
       .then((r) => r.json())
-      .then((data) => {
+      .then(data => {
         console.log(data.id)
         setTodaysAbc(data.abc_notation.slice(37).replace(/\s+/g, ''))
         setSong(data)
         // console.log(data.abc_notation[39])
         setFirstMeasure(`${data.abc_notation[39]}2`)
+        return data
+      })
+      .then(data => {
+        fetch(`/song_guesses/${user.id}/${data.id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+          }
+        })
+        .then((r) => r.json())
+        .then(data => {
+          console.log(data)
+          setGuesses(data)
+        })
+
+        fetch(`/song_plays/${user.id}/${data.id}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+          }
+        })
+        .then((r) => r.json())
+        .then(data => {
+          console.log(data)
+          setNumberOfPlays(data['number_of_plays'])
+        })
       })
     }
   }, [user])
@@ -328,6 +349,37 @@ const targetObj = abcjs.renderAbc(
   );
   
   function playTarget() {
+    let newNumberOfPlays = numberOfPlays + 1
+    setNumberOfPlays(newNumberOfPlays)
+
+    if (numberOfPlays === null) {
+      fetch(`/song_plays/${user.id}/${song.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        },
+        body: JSON.stringify({
+          song_id: song.id,
+          user_id: user.id,
+          number_of_plays: 1
+        })
+      })
+    } else {
+      fetch(`/song_plays/${user.id}/${song.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        },
+        body: JSON.stringify({
+          song_id: song.id,
+          user_id: user.id,
+          number_of_plays: newNumberOfPlays
+        })
+      })
+    }
+
     calculateTempo()
     const myContext = new AudioContext();
     running = synth.init({
@@ -422,6 +474,7 @@ const targetObj = abcjs.renderAbc(
       <button onClick={handleGuess}>guess</button>
       <button onClick={handleHint}>hint</button>
       <h3>accuracy: {accuracy}</h3>
+      <h3>number of plays: {numberOfPlays}</h3>
 
       <NoteTypes setNoteType={setNoteType}></NoteTypes>
       
