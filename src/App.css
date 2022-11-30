@@ -45,3 +45,7 @@
 .btn:hover {
   background-color: #3d8a9f;
 }
+
+#paper2 {
+  visibility: hidden;
+}

@@ -5,34 +5,69 @@ import NoteTypes from './NoteTypes';
 import PreviousGuesses from './PreviousGuesses';
 import Soundfont from 'soundfont-player';
 import stringSimilarity from 'string-similarity';
+import { useNavigate } from 'react-router-dom';
 
 // import Abcjs from './Abcjs';
 
 import abcjs from 'abcjs';
 
-function Daily() {
+function Daily({ user }) {
+  const navigate = useNavigate()
+  const date = new Date();
 
   const [midiToNotes, setMidiToNotes] = useState({});
   const [note, setNote] = useState('');
 
   const [key, setKey] = useState('C');
   const [timeSignature, setTimeSignature] = useState('4/4');
-  const [firstMeasure, setFirstMeasure] = useState('G2');
+  const [firstMeasure, setFirstMeasure] = useState('');
   const [secondMeasure, setSecondMeasure] = useState('');
-  const [thirdMeasure, setThirdMeasure] = useState('');
-  const [fourthMeasure, setFourthMeasure] = useState('');
+  const [thirdMeasure, setThirdMeasure] = useState('c8');
+  // const [fourthMeasure, setFourthMeasure] = useState('');
   const [noteType, setNoteType] = useState('2');
   const [tempoInMs, setTempoInMs] = useState(0);
-  const [bpm, setBpm] = useState(120);
+  const [bpm, setBpm] = useState(100);
   const [visualNote, setVisualNote] = useState({});
   const [accuracy, setAccuracy] = useState(null);
 
-
+  const [complete, setComplete] = useState(false);
   const [space, setSpace] = useState(1);
+  const [guesses, setGuesses] = useState([]);
+  const [todaysAbc, setTodaysAbc] = useState('');
+  const [song, setSong] = useState({});
+  
+  useEffect(() => {
+    if (user) {
+      setGuesses(user.guesses);
+    }
+  }, [user])
+
+  // get daily challenge
+
+  useEffect(() => {
+    if (user) {
+      fetch(`/daily/${date.getMonth()+1}${date.getDate()}${date.getFullYear()}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        }
+      })
+      .then((r) => r.json())
+      .then((data) => {
+        console.log(data.id)
+        setTodaysAbc(data.abc_notation.slice(37).replace(/\s+/g, ''))
+        setSong(data)
+        // console.log(data.abc_notation[39])
+        setFirstMeasure(`${data.abc_notation[39]}2`)
+      })
+    }
+  }, [user])
+  
+  // console.log(`${date.getMonth()+1}${date.getDate()}${date.getFullYear()}`)
 
   // put together abc notation
 
-  let abc = `X:1\nT:Daily\nM:${timeSignature}\nQ:${bpm}\nK:${key}\n|: ${firstMeasure}| ${secondMeasure}| ${thirdMeasure}| ${fourthMeasure}|`
+  let abc = `X:1\nT:Daily\nM:${timeSignature}\nQ:${bpm}\nK:${key}\n|: ${firstMeasure}| ${secondMeasure}| ${thirdMeasure}|`
 
   // keyboard
 
@@ -75,7 +110,6 @@ function Daily() {
 
   function handlePress(midiNumber) {
     // z is rest
-    // console.log(midiNumber)
     
     let spaceForUse;
     let remainingSpace;
@@ -87,7 +121,6 @@ function Daily() {
 
         if (spaceForUse <= 4) {
           remainingSpace = 4 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 1); 
@@ -95,7 +128,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 8) {
           remainingSpace = 8 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 1); 
@@ -103,7 +135,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 12) {
           remainingSpace = 12 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 1); 
@@ -111,7 +142,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 16) {
           remainingSpace = 16 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 1); 
@@ -123,7 +153,6 @@ function Daily() {
 
         if (spaceForUse <= 4) {
           remainingSpace = 4 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 0.5); 
@@ -131,7 +160,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 8) {
           remainingSpace = 8 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 0.5); 
@@ -139,7 +167,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 12) {
           remainingSpace = 12 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 0.5); 
@@ -147,7 +174,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 16) {
           remainingSpace = 16 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 0.5); 
@@ -160,7 +186,6 @@ function Daily() {
 
         if (spaceForUse <= 4) {
           remainingSpace = 4 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 0.25); 
@@ -168,7 +193,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 8) {
           remainingSpace = 8 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 0.25); 
@@ -176,7 +200,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 12) {
           remainingSpace = 12 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 0.25); 
@@ -184,7 +207,6 @@ function Daily() {
           }
         } else if (spaceForUse <= 16) {
           remainingSpace = 16 - space;
-          // console.log(remainingSpace)
 
           if (remainingSpace <= 4) {
             setSpace(space + 0.25); 
@@ -196,10 +218,8 @@ function Daily() {
 
     let onFirst = false
     let onSecond = false
-    let onThird = false
-    let onFourth = false
-
-    // console.log('space for use: ', spaceForUse)
+    // let onThird = false
+    // let onFourth = false
 
     if (spaceForUse <= 4) {
       onFirst = true
@@ -207,14 +227,6 @@ function Daily() {
       onFirst = false
       onSecond = true
       remainingSpace = 8 - spaceForUse
-    } else if (spaceForUse <= 12) {
-      onSecond = false
-      onThird = true
-      remainingSpace = 12 - spaceForUse
-    } else if (spaceForUse <= 16) {
-      onThird = false
-      onFourth = true
-      remainingSpace = 16 - spaceForUse
     }
 
     if (moveForward) {
@@ -225,12 +237,6 @@ function Daily() {
         } else if (onSecond) {
           let updatedMeasure = `${secondMeasure}`+` ${midiToNotes[midiNumber]}${noteType}`;
           setSecondMeasure(updatedMeasure);
-        } else if (onThird) {
-          let updatedMeasure = `${thirdMeasure}`+` ${midiToNotes[midiNumber]}${noteType}`;
-          setThirdMeasure(updatedMeasure);
-        } else if (onFourth) {
-          let updatedMeasure = `${fourthMeasure}`+` ${midiToNotes[midiNumber]}${noteType}`;
-          setFourthMeasure(updatedMeasure);
         }
       } else {
         if (onFirst) {
@@ -239,12 +245,6 @@ function Daily() {
         } else if (onSecond) {
           let updatedMeasure = `${secondMeasure}`+`${midiToNotes[midiNumber]}${noteType}`;
           setSecondMeasure(updatedMeasure);
-        } else if (onThird) {
-          let updatedMeasure = `${thirdMeasure}`+`${midiToNotes[midiNumber]}${noteType}`;
-          setThirdMeasure(updatedMeasure);
-        } else if (onFourth) {
-          let updatedMeasure = `${fourthMeasure}`+`${midiToNotes[midiNumber]}${noteType}`;
-          setFourthMeasure(updatedMeasure);
         }
       }
     }
@@ -253,7 +253,6 @@ function Daily() {
 
     // document.querySelectorAll('path').forEach((path) => {
     //   if (path.className.baseVal === 'abcjs-stem') {
-    //     // console.log(path.parentElement.className)
     //     // path.parentElement.className = 
         
     //     // console.log(typeof path.parentElement)
@@ -269,6 +268,7 @@ function Daily() {
   }
 
   // audio
+  //      play user tune
 
   const synth = new abcjs.synth.CreateSynth();
 
@@ -300,7 +300,6 @@ function Daily() {
           pan: [ -0.3, 0.3 ] 
     }
     }).then(function (results) {
-      console.log(results)
       synth.prime()
     })
     .then(() => {
@@ -315,16 +314,96 @@ function Daily() {
     synth.stop()
   }
 
+  //     play target tune
+
+const targetObj = abcjs.renderAbc(
+    "paper2", 
+    todaysAbc, 
+    { dragging: true, 
+      clickListener: function (ev) {
+        // dragging function
+        console.log(ev)
+      }
+    }
+  );
+  
+  function playTarget() {
+    calculateTempo()
+    const myContext = new AudioContext();
+    running = synth.init({
+      audioContext: myContext,
+      visualObj: targetObj[0],
+      millisecondsPerMeasure: tempoInMs,
+      options: {
+          soundFontUrl: "",
+          pan: [ -0.3, 0.3 ] 
+    }
+    }).then(function (results) {
+      synth.prime()
+    })
+    .then(() => {
+      synth.start();
+    })
+    .catch(function (reason) {
+      console.log(reason)
+    });
+  }
+
   // console.log(document.querySelector('#midi60'))
 
-  // handle guess
+  // guess
 
   function handleGuess() {
-    let todaysAbc = '|:G2cc dedB|dedB dedB|c2ec B2dB|c2A2 A2BA|'.replace(/\s+/g, '')
-    console.log(todaysAbc, 'abc:', abc.slice(28).replace(/\s+/g, ''))
-    console.log(stringSimilarity.compareTwoStrings(abc.slice(28).replace(/\s+/g, ''), todaysAbc))
-    setAccuracy(stringSimilarity.compareTwoStrings(abc.slice(28).replace(/\s+/g, ''), todaysAbc))
+    console.log(space)
+    if (space >= 8) {
+      // let todaysAbc = '|:G2cc dedB|dedB dedB|c8|'.replace(/\s+/g, '')
+      let newAccuracy = stringSimilarity.compareTwoStrings(abc.slice(28).replace(/\s+/g, ''), todaysAbc)
+      console.log(abc.slice(28).replace(/\s+/g, ''), todaysAbc)
+      newAccuracy = parseFloat(String(newAccuracy).slice(0, 4))
+      setAccuracy(newAccuracy)
 
+      console.log('song_id:', song.id)
+  
+      fetch('/guesses', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`, 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({
+          accuracy: newAccuracy,
+          user_id: user.id,
+          abc: abc.slice(28),
+          song_id: song.id
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        let newGuesses = [...guesses, data]
+        setGuesses(newGuesses)
+        console.log(data)
+      })
+      .catch(err => console.log(err))
+  
+      if (accuracy === 1) {
+        setComplete(true)
+      }
+    } else {
+      alert('You need to finish the song before you can guess!')
+    }
+  }
+
+  // hint
+
+  function handleHint() {
+  }
+
+  if (complete) {
+    return (
+      <div>
+        <h1>Complete!</h1>
+      </div>
+    )
   }
 
   return (
@@ -333,13 +412,15 @@ function Daily() {
       <button onClick={stop}>Stop</button>
 
       <div id="paper"></div>
+      <div id="paper2"></div>
       <button onClick={() => {
-        setFirstMeasure('')
+        setFirstMeasure(`${todaysAbc[2]}2`)
         setSecondMeasure('')
-        setThirdMeasure('')
-        setFourthMeasure('')
+        setSpace(1)
       }}>reset</button>
+      <button onClick={playTarget}>play target</button>
       <button onClick={handleGuess}>guess</button>
+      <button onClick={handleHint}>hint</button>
       <h3>accuracy: {accuracy}</h3>
 
       <NoteTypes setNoteType={setNoteType}></NoteTypes>
@@ -361,7 +442,7 @@ function Daily() {
         keyboardShortcuts={keyboardShortcuts}
       />
 
-      <PreviousGuesses/>
+      <PreviousGuesses user={user} guesses={guesses}/>
     </div>
   );
 }

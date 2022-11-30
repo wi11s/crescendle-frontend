@@ -6,6 +6,7 @@ import NotFound from './NotFound';
 import Profile from './Profile';
 import Practice from './Practice';
 import Header from './Header';
+import Success from './Success';
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
       }
     })
     .then((r) => {
-      console.log(r)
+      // console.log(r)
       if (r.ok) {
         r.json()
         .then((user) => setUser(user));
@@ -32,7 +33,7 @@ function App() {
         })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data)
+          // console.log(data)
           if (data.user) {
             localStorage.setItem("jwt", data.token);
             setUser(data);
@@ -50,10 +51,11 @@ function App() {
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<Daily/>} />
+        <Route path="/" element={<Daily user={user}/>} />
         <Route path="/practice" element={<Practice/>} />
         <Route path="*" element={<NotFound />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/success" element={<Success />} />
       </Routes>
     </div>
   );
