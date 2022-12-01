@@ -23,7 +23,7 @@ export default function NoteTypes({setNoteType}) {
 
 
   return (
-    <div>
+    <div className='noteTypes'>
         <button id="quarterNote" onClick={handleQuarterClick} className={isSelected==='quarter' ? 'btnSelected btn' : 'btnUnselected btn'}>♩</button>
         <button id="eighthNote" onClick={handleEighthClick} className={isSelected==='eighth' ? 'btnSelected btn' : 'btnUnselected btn'}>♫</button>
         <button id="sixteenthNote" onClick={handleSixteenthClick} className={isSelected==='sixteenth' ? 'btnSelected btn' : 'btnUnselected btn'}>♬</button>

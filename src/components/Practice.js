@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
 import 'react-piano/dist/styles.css';
+import Login from './Login';
 
 import Abcjs from './Abcjs';
 
-function Practice() {
+function Practice({user}) {
 
   // keyboard
 
@@ -15,6 +16,10 @@ function Practice() {
     lastNote: lastNote,
     keyboardConfig: KeyboardShortcuts.HOME_ROW,
   });
+
+  if (!user.username) {
+    return <Login/>
+  }
 
   return (
     <div className="practice">

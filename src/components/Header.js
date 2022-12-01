@@ -12,21 +12,32 @@ export default function Header() {
     //     navigate("/");
     }
 
+    function handleHomeClick() {
+        navigate("/")
+    }
+
+    function handlePracticeClick() {
+        navigate("/practice")
+    }
+
+    function handleProfileClick() {
+        navigate("/profile")
+    }
+
   return (
     <nav className="navbar">
-        <a className="navbar-brand" href="#">Crescendle</a>
+        <a className="navbar-brand" href="" onClick={handleHomeClick}>CRESCENDLE</a>
+        <div className="navbar-all-items">
 
-        <Link className='nav-item' to="/">
-            <h6 className="nav-item-text">Home</h6>  
-        </Link>
+            <div onClick={handlePracticeClick} className="btn-2 nav-item">
+                <a><span>PRACTICE</span></a>
+            </div>
 
-        <Link className='nav-item' to="/practice">
-            <h6 className="nav-item-text">Practice</h6>  
-        </Link>
+            <div onClick={handleProfileClick} className="btn-2 nav-item">
+                <a><span>PROFILE</span></a>
+            </div>
 
-        <Link className='nav-item' to="/profile">
-            <h6 className="nav-item-text">Profile</h6>  
-        </Link>
+        </div>
     </nav>
   )
 }

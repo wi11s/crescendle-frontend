@@ -5,6 +5,7 @@ import NoteTypes from './NoteTypes';
 import PreviousGuesses from './PreviousGuesses';
 import Soundfont from 'soundfont-player';
 import stringSimilarity from 'string-similarity';
+import Stats from './Stats';
 import { useNavigate } from 'react-router-dom';
 
 // import Abcjs from './Abcjs';
@@ -27,8 +28,8 @@ function Daily({ user }) {
   const [noteType, setNoteType] = useState('2');
   const [tempoInMs, setTempoInMs] = useState(0);
   const [bpm, setBpm] = useState(100);
-  const [visualNote, setVisualNote] = useState({});
-  const [accuracy, setAccuracy] = useState(null);
+  // const [visualNote, setVisualNote] = useState({});
+  const [accuracy, setAccuracy] = useState(0);
 
   const [complete, setComplete] = useState(false);
   const [space, setSpace] = useState(1);
@@ -38,10 +39,24 @@ function Daily({ user }) {
   const [numberOfPlays, setNumberOfPlays] = useState(0);
 
   // initial load: get daily challenge and guesses and number of plays
+  let month;
+  if (date.getMonth() + 1 < 10) {
+    month = `0${date.getMonth() + 1}`;
+  } else {
+    month = date.getMonth() + 1;
+  }
+  let day;
+  if (date.getDate() < 10) {
+    day = `0${date.getDate()}`;
+  } else {
+    day = date.getDate();
+  }
+  let year = date.getFullYear();
+  let fullDate = `${month}${day}${year}`;
 
   useEffect(() => {
     if (user) {
-      fetch(`/daily/${date.getMonth()+1}${date.getDate()}${date.getFullYear()}`, {
+      fetch(`/daily/${fullDate}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -49,11 +64,10 @@ function Daily({ user }) {
       })
       .then((r) => r.json())
       .then(data => {
-        console.log(data.id)
-        setTodaysAbc(data.abc_notation.slice(37).replace(/\s+/g, ''))
+        // console.log(data.abc_notation[2])
+        setTodaysAbc(data.abc_notation.replace(/\s+/g, ''))
         setSong(data)
-        // console.log(data.abc_notation[39])
-        setFirstMeasure(`${data.abc_notation[39]}2`)
+        setFirstMeasure(`${data.abc_notation[2]}2`)
         return data
       })
       .then(data => {
@@ -65,10 +79,9 @@ function Daily({ user }) {
         })
         .then((r) => r.json())
         .then(data => {
-          console.log(data)
           setGuesses(data)
-        })
 
+        })
         fetch(`/song_plays/${user.id}/${data.id}`, {
           method: 'GET',
           headers: {
@@ -78,7 +91,10 @@ function Daily({ user }) {
         .then((r) => r.json())
         .then(data => {
           console.log(data)
-          setNumberOfPlays(data['number_of_plays'])
+          if (data !== null) {
+            setNumberOfPlays(data['number_of_plays'])
+            // setComplete(data.completed)
+          }
         })
       })
     }
@@ -88,7 +104,7 @@ function Daily({ user }) {
 
   // put together abc notation
 
-  let abc = `X:1\nT:Daily\nM:${timeSignature}\nQ:${bpm}\nK:${key}\n|: ${firstMeasure}| ${secondMeasure}| ${thirdMeasure}|`
+  let abc = `X:1\nM:${timeSignature}\nQ:${bpm}\nK:${key}\n|: ${firstMeasure}| ${secondMeasure}| ${thirdMeasure}|`
 
   // keyboard
 
@@ -307,10 +323,13 @@ function Daily({ user }) {
   function calculateTempo() {
     setTempoInMs(240000/bpm)
   }
+
+  useEffect(() => {
+    calculateTempo()
+  }, [])
   
   let running;
   function play() {
-    calculateTempo()
     const myContext = new AudioContext();
     running = synth.init({
       audioContext: myContext,
@@ -352,7 +371,7 @@ const targetObj = abcjs.renderAbc(
     let newNumberOfPlays = numberOfPlays + 1
     setNumberOfPlays(newNumberOfPlays)
 
-    if (numberOfPlays === null) {
+    if (numberOfPlays === 0) {
       fetch(`/song_plays/${user.id}/${song.id}`, {
         method: 'POST',
         headers: {
@@ -362,7 +381,8 @@ const targetObj = abcjs.renderAbc(
         body: JSON.stringify({
           song_id: song.id,
           user_id: user.id,
-          number_of_plays: 1
+          number_of_plays: 1,
+          completed: complete
         })
       })
     } else {
@@ -401,7 +421,7 @@ const targetObj = abcjs.renderAbc(
     });
   }
 
-  // console.log(document.querySelector('#midi60'))
+  console.log(abc.slice(20))
 
   // guess
 
@@ -425,7 +445,7 @@ const targetObj = abcjs.renderAbc(
         body: JSON.stringify({
           accuracy: newAccuracy,
           user_id: user.id,
-          abc: abc.slice(28),
+          abc: abc.slice(20),
           song_id: song.id
         })
       })
@@ -437,65 +457,89 @@ const targetObj = abcjs.renderAbc(
       })
       .catch(err => console.log(err))
   
-      if (accuracy === 1) {
+      if (newAccuracy === 1) {
+        fetch(`/completed/${user.id}/${song.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+          },
+          body: JSON.stringify({
+          })
+        })
         setComplete(true)
       }
+
     } else {
       alert('You need to finish the song before you can guess!')
     }
   }
 
-  // hint
-
-  function handleHint() {
-  }
-
   if (complete) {
-    return (
-      <div>
-        <h1>Complete!</h1>
-      </div>
-    )
+    return <Stats abc={song.abc_notation}/>
   }
 
   return (
     <div className="daily">
-      <button onClick={play}>Start</button>
-      <button onClick={stop}>Stop</button>
 
-      <div id="paper"></div>
-      <div id="paper2"></div>
-      <button onClick={() => {
-        setFirstMeasure(`${todaysAbc[2]}2`)
-        setSecondMeasure('')
-        setSpace(1)
-      }}>reset</button>
-      <button onClick={playTarget}>play target</button>
-      <button onClick={handleGuess}>guess</button>
-      <button onClick={handleHint}>hint</button>
-      <h3>accuracy: {accuracy}</h3>
-      <h3>number of plays: {numberOfPlays}</h3>
+      <div className="start-stop">
+        <div onClick={play} className="btn">
+          <a><span>PLAY</span></a>
+        </div>
+        <div onClick={stop} className="btn">
+          <a><span>STOP</span></a>
+        </div>
+      </div>
 
-      <NoteTypes setNoteType={setNoteType}></NoteTypes>
+      <div className='staff-and-controllers'>
+
+        <div id="paper"></div>
+
+        <div className="controllers">
+          <button className="panel-btn" onClick={() => {
+            setFirstMeasure(`${todaysAbc[2]}2`)
+            setSecondMeasure('')
+            setSpace(1)
+          }}>RESET</button>
+          <button className="panel-btn" onClick={playTarget}>PLAY TARGET</button>
+          <button className="panel-btn" id='guess-btn' onClick={handleGuess}>GUESS</button>
+        </div>
+
+      </div>
+
+      <div className="info">
+        <h3>ACCURACY: {accuracy}</h3>
+        <h3>NUMBER OF LISTENS: {numberOfPlays}</h3>
+      </div>
+
+      <div className="piano">
+        <NoteTypes setNoteType={setNoteType}></NoteTypes>
+        <Piano
+          className="react-piano"
+          onPlayNoteInput={(midiNumber) => {
+            handlePress(midiNumber);
+          }}
+          noteRange={{ first: firstNote, last: lastNote }}
+          playNote={(midiNumber) => {
+            Soundfont.instrument(new AudioContext(), 'acoustic_grand_piano').then(function (piano) {
+              piano.play(midiNumber, 0, { duration: 0.5, gain: 10 });
+            })
+          }}
+          stopNote={(midiNumber) => {
+            // Stop playing a given note - see notes below
+          }}
+          width={1000}
+          keyboardShortcuts={keyboardShortcuts}
+        />
+      </div>
+
+      <hr className='guesses-hr'></hr>
       
-      <Piano
-        onPlayNoteInput={(midiNumber) => {
-          handlePress(midiNumber);
-        }}
-        noteRange={{ first: firstNote, last: lastNote }}
-        playNote={(midiNumber) => {
-          Soundfont.instrument(new AudioContext(), 'acoustic_grand_piano').then(function (piano) {
-            piano.play(midiNumber, 0, { duration: 0.5, gain: 10 });
-          })
-        }}
-        stopNote={(midiNumber) => {
-          // Stop playing a given note - see notes below
-        }}
-        width={1000}
-        keyboardShortcuts={keyboardShortcuts}
-      />
+      <div className='previous-guesses'>
+        <PreviousGuesses user={user} guesses={guesses}/>
+      </div>
 
-      <PreviousGuesses user={user} guesses={guesses}/>
+      <div id="paper2">Hidden</div>
     </div>
   );
 }
