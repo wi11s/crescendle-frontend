@@ -5,7 +5,7 @@ import Login from './Login';
 
 import Abcjs from './Abcjs';
 
-function Practice({user, setUser}) {
+function Practice({user, setUser, streak, setStreak}) {
   console.log(user)
 
   // keyboard
@@ -19,8 +19,8 @@ function Practice({user, setUser}) {
   });
 
 
-  if (user===null || !(user.username)) {
-    return <Login user={user} setUser={setUser}/>
+  if (user===null || !(user.name)) {
+    return <Login user={user} setUser={setUser} streak={streak} setStreak={setStreak}/>
   }
 
   return (

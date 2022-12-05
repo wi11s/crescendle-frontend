@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 import abcjs from 'abcjs';
 
-function Daily({ user }) {
+function Daily({ user, streak, setStreak }) {
   const navigate = useNavigate()
   const date = new Date();
 
@@ -37,7 +37,6 @@ function Daily({ user }) {
   const [todaysAbc, setTodaysAbc] = useState('');
   const [song, setSong] = useState({});
   const [numberOfPlays, setNumberOfPlays] = useState(0);
-  const [streak, setStreak] = useState(0);
 
   // initial load: get daily challenge and guesses and number of plays
   let month;
@@ -587,11 +586,13 @@ function Daily({ user }) {
           />
         </div>
       </div>
-      <hr className='guesses-hr'></hr>
+      {/* <hr className='guesses-hr'></hr> */}
       <div>
         
-        <div className='previous-guesses'>
-          <PreviousGuesses user={user} guesses={guesses}/>
+        <div className='outer-previous-guesses'>
+          <div className='previous-guesses'>
+            <PreviousGuesses user={user} guesses={guesses}/>
+          </div>
         </div>
 
         <div id="paper2">Hidden</div>

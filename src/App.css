@@ -37,20 +37,31 @@
 }
 
 .daily {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  right: 0%;
+  bottom: 0%;
   display: flex;
   flex-direction: row;
   gap: 7%;
+  overflow: hidden;
 }
 
 .game-ui {
   width: 60%;
   height: 100%;
   padding-left: 2%;
-  padding-bottom: 2%
+  padding-bottom: 2%;
+  position: absolute;
+  top: 10%;
+  left: 2%;
+  right: 68%;
+  bottom: 2%;
 }
 
 .guesses-hr {
-  border-left: 1px solid #000000;
+  border-left: 1px solid #ffffff;
   margin-top: 0%;
   margin-bottom: 0%;
   color:rgb(0, 0, 0);
@@ -133,6 +144,7 @@ hr {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  height: 150px;
 }
 
 .reset-guess {
@@ -186,14 +198,28 @@ hr {
   color: black;
 }
 
+
+
 .previous-guesses {
   display: flex;
-  /* border: solid 2px black; */
-  margin-top: 5%;
+  background-color: #000;
+  border: solid 4px black;
+  /*margin-top: 0%;
   margin-left: -10%;
   margin-right: 0%;
-  width: 60%;
+  width: 60%; */
+  position: absolute;
+  top:15%;
+  left: 68%;
+  right: 2%;
+  bottom: 2%;
+  overflow: scroll;
 }
+
+/* .outer-previous-guesses {
+  position: absolute;
+
+} */
 
 #guesses-comp {
   display: flex;
@@ -202,6 +228,11 @@ hr {
   justify-content: center;
   gap: 10px;
   margin: auto;
+  /* background-color: white; */
+}
+
+#guesses-comp h2, h3{
+  color: white;
 }
 
 .guesses {
@@ -216,10 +247,12 @@ hr {
 .guess {
   margin-top: 0%;
   padding-top: 8%;
-  margin-bottom: 0%;
+  margin-bottom: 5%;
   height: 100px;
   width: 250px;
   border-top: #000 solid 1px;
+  background-color: white;
+  border-radius: 10px;
 }
 
 .ReactPiano__Key--natural {
@@ -379,6 +412,22 @@ span {
   transform: scaleX(1);
 }
 
+#logout a {
+  background-color: #FFD700;
+}
+
+#login a {
+  background-color: #FFD700;
+}
+
+#logout a span {
+  font-size: 10px;
+}
+
+#login a span {
+  font-size: 10px;
+}
+
 .stats-outer-div {
   margin-top: 2%;
 }
@@ -440,6 +489,8 @@ form {
   border-width: 2px;
   border-color: #000;
   padding: 15px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .signup {
@@ -447,7 +498,8 @@ form {
   border-width: 2px;
   border-color: #000;
   padding: 15px;
-
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .switcher {

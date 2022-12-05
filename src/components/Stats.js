@@ -6,7 +6,6 @@ export default function Stats({abc, fullDate, numberOfPlays, guesses, streak}) {
   const [mean, setMean] = useState(0)
   const [median, setMedian] = useState(0)
 
-
   useEffect(() => {
     fetch(`/stats/${fullDate}`, {
       method: "GET",
@@ -25,7 +24,7 @@ export default function Stats({abc, fullDate, numberOfPlays, guesses, streak}) {
 
   return (
     <div className='stats-outer-div'>
-        <h2>{numberOfPlays===1 ? `Well Done! You solved today's Crescendle in ${guesses} guesses and with ${numberOfPlays} listen`: `Well Done! You solved today's Crescendle in ${guesses} guesses and with ${numberOfPlays} listens`}</h2>
+        <h2>{numberOfPlays===1 ? `Well Done! You solved today's Crescendle in ${guesses} guess and with ${numberOfPlays} listen`: `Well Done! You solved today's Crescendle in ${guesses} guesses and with ${numberOfPlays} listens`}</h2>
         <Abcjs
             abcNotation={
                 abc
@@ -39,8 +38,8 @@ export default function Stats({abc, fullDate, numberOfPlays, guesses, streak}) {
             <hr className='stats-hr'></hr>
             <h3 className='stats-h3'>{parseInt(solvedCount)===1 ? "1 person has solved today's Crescendle": `${solvedCount} people have solved today's Crescendle`}</h3>
             <h3 className='stats-h3'>Streak: {streak}</h3>
-            <h3 className='stats-h3'>Mean listens: {parseInt(mean)}</h3>
-            <h3 className='stats-h3'>Median listens: {parseInt(median)}</h3>
+            <h3 className='stats-h3'>Mean listens: {mean.toString().slice(0, 4)}</h3>
+            <h3 className='stats-h3'>Median listens: {median.toString().slice(0, 4)}</h3>
         </div>
     </div>
   )

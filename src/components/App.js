@@ -10,6 +10,8 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [streak, setStreak] = useState(0);
+
 
   useEffect(() => {
     fetch("/me", {
@@ -19,7 +21,7 @@ function App() {
       }
     })
     .then((r) => {
-      // console.log(r)
+      console.log(r)
       if (r.ok) {
         r.json()
         .then((user) => {
@@ -51,13 +53,13 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header user={user} setUser={setUser}/>
       <hr></hr>
       <Routes>
-        <Route path="/" element={<Daily user={user}/>} />
-        <Route path="/practice" element={<Practice user={user} setUser={setUser}/>} />
+        <Route path="/" element={<Daily user={user} streak={streak} setStreak={setStreak}/>} />
+        <Route path="/practice" element={<Practice user={user} setUser={setUser} streak={streak} setStreak={setStreak}/>} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/profile" element={<Profile user={user}/>} />
+        <Route path="/profile" element={<Profile user={user} setUser={setUser} streak={streak} setStreak={setStreak}/>} />
       </Routes>
     </div>
   );
