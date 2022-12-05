@@ -5,7 +5,8 @@ import Login from './Login';
 
 import Abcjs from './Abcjs';
 
-function Practice({user}) {
+function Practice({user, setUser}) {
+  console.log(user)
 
   // keyboard
 
@@ -17,8 +18,9 @@ function Practice({user}) {
     keyboardConfig: KeyboardShortcuts.HOME_ROW,
   });
 
-  if (!user.username) {
-    return <Login/>
+
+  if (user===null || !(user.username)) {
+    return <Login user={user} setUser={setUser}/>
   }
 
   return (

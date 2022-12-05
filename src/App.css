@@ -36,12 +36,23 @@
   flex-direction: row;
 }
 
+.daily {
+  display: flex;
+  flex-direction: row;
+  gap: 7%;
+}
+
+.game-ui {
+  width: 60%;
+  height: 100%;
+  padding-left: 2%;
+  padding-bottom: 2%
+}
+
 .guesses-hr {
-  margin-top: 8%;
-  border-top: 1px solid #000000;
-  margin-left: 2%;
-  margin-right: 2%;
-  background-color: #000000;
+  border-left: 1px solid #000000;
+  margin-top: 0%;
+  margin-bottom: 0%;
   color:rgb(0, 0, 0);
 }
 
@@ -64,6 +75,7 @@ hr {
 .react-piano {
   display: flex;
   margin: auto;
+  height: 10%;
 }
 
 .noteTypes {
@@ -97,7 +109,7 @@ hr {
   align-items: center;
   justify-content: center;
   margin-top: 0px;
-  margin-bottom: -40px;
+  margin-bottom: 0px;
 }
 
 #paper {
@@ -109,28 +121,34 @@ hr {
 
 .staff-and-controllers {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 0%;
   margin-left: 10%;
   margin-right: 10%;
-  gap:20px;
 }
 
 .controllers {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
+}
+
+.reset-guess {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .controllers button {
   font-family: 'Lora', serif;
-  font-size: 15px;
+  font-size: 10px;
   color: white;
   background-color: #000000;
   margin: 3px;
   padding: 6px;
+  text-align: center;
 }
 
 .controllers button:hover {
@@ -170,10 +188,11 @@ hr {
 
 .previous-guesses {
   display: flex;
-  border: solid 2px black;
-  margin-top: 8%;
-  margin-left: 30%;
-  margin-right: 30%;
+  /* border: solid 2px black; */
+  margin-top: 5%;
+  margin-left: -10%;
+  margin-right: 0%;
+  width: 60%;
 }
 
 #guesses-comp {
@@ -360,6 +379,10 @@ span {
   transform: scaleX(1);
 }
 
+.stats-outer-div {
+  margin-top: 2%;
+}
+
 .stats {
   background-color: #000;
   position:absolute;
@@ -375,7 +398,7 @@ span {
   text-align: center;
   font-size: 20px;
   padding-top: 10px;
-  letter-spacing: 30px;
+  letter-spacing: 10px;
 }
 
 .stats-h3 {
@@ -392,4 +415,65 @@ span {
   margin-right: 2%;
   background-color: #fff;
   color: #fff;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10%;
+}
+
+.login {
+  border: solid;
+  border-width: 2px;
+  border-color: #000;
+  padding: 15px;
+}
+
+.signup {
+  border: solid;
+  border-width: 2px;
+  border-color: #000;
+  padding: 15px;
+
+}
+
+.switcher {
+  margin-top: -4%;
+  font-size: 12px;
+}
+
+.text-input {
+  width: 200px;
+  height: 30px;
+  border: solid;
+  border-width: 1px;
+  border-color: #000;
+}
+
+.submit {
+  width: 100px;
+  height: 30px;
+  border: solid;
+  border-width: 1px;
+  border-color: #000;
+  background-color: white;
+  font-family: 'Lora', serif;
+}
+
+.submit:hover {
+  background-color: #FFD700;
+  color: black;
 }

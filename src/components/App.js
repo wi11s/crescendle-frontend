@@ -22,7 +22,10 @@ function App() {
       // console.log(r)
       if (r.ok) {
         r.json()
-        .then((user) => setUser(user));
+        .then((user) => {
+          console.log(user)
+          setUser(user)
+        });
       } else {
         fetch('/users', {
           method: 'POST',
@@ -32,7 +35,7 @@ function App() {
         })
         .then((res) => res.json())
         .then((data) => {
-          // console.log(data)
+          console.log(data)
           if (data.user) {
             localStorage.setItem("jwt", data.token);
             setUser(data);
@@ -52,7 +55,7 @@ function App() {
       <hr></hr>
       <Routes>
         <Route path="/" element={<Daily user={user}/>} />
-        <Route path="/practice" element={<Practice user={user}/>} />
+        <Route path="/practice" element={<Practice user={user} setUser={setUser}/>} />
         <Route path="*" element={<NotFound />} />
         <Route path="/profile" element={<Profile user={user}/>} />
       </Routes>
