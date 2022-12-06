@@ -6,7 +6,7 @@ export default function Login({user, setUser, streak, setStreak}) {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
-  const [id, setId] = useState(user.id)
+  const [id, setId] = useState(null)
   console.log(user)
 
   useEffect(() => {
@@ -42,6 +42,12 @@ export default function Login({user, setUser, streak, setStreak}) {
     e.preventDefault()
     console.log(email, name, password, passwordConfirmation)
     console.log(streak)
+
+    if (password !== passwordConfirmation) {
+      alert('passwords do not match')
+      return
+    }
+
     fetch(`/users_with_data/${streak}/${id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -80,7 +86,7 @@ export default function Login({user, setUser, streak, setStreak}) {
           <input className='text-input' type='text' placeholder='name' onChange={e => setName(e.target.value)}></input>
           <input className='text-input' type='password' placeholder='password' onChange={e => setPassword(e.target.value)}></input>
           <input className='text-input' type='password' placeholder='confirm password' onChange={e => setPasswordConfirmation(e.target.value)}></input>
-          <input className='submit' type='submit' value='SUBMIT'></input>
+          <input className='submit' type='submit' value='SUBMIT' style={password===passwordConfirmation ? {color: 'green'} : {color: 'red'} }></input>
         </form>
       )}
         {switcher ? <p className='message'>don't have an account?</p> : <p className='message'>already have an account?</p>}

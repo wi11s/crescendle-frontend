@@ -91,7 +91,7 @@ function Daily({ user, streak, setStreak }) {
         })
         .then((r) => r.json())
         .then(data => {
-          console.log(data)
+          // console.log(data)
           if (data !== null) {
             setNumberOfPlays(data['number_of_plays'])
             setComplete(data.completed)
@@ -360,7 +360,7 @@ function Daily({ user, streak, setStreak }) {
   }
 
   useEffect(() => {
-    console.log(synth)
+    // console.log(synth)
     setPlaying(synth.isRunning)
   }, [synth.isRunning])
 
@@ -372,7 +372,7 @@ function Daily({ user, streak, setStreak }) {
     { dragging: true, 
       clickListener: function (ev) {
         // dragging function
-        console.log(ev)
+        // console.log(ev)
       }
     }
   );
@@ -430,7 +430,7 @@ function Daily({ user, streak, setStreak }) {
     .catch(function (reason) {
       console.log(reason)
     });
-    console.log(synth.isRunning)
+    // console.log(synth.isRunning)
   }
 
   // guess
@@ -456,15 +456,15 @@ function Daily({ user, streak, setStreak }) {
   // console.log(yesterdayFullDate)
 
   function handleGuess() {
-    console.log(space)
+    // console.log(space)
     if (space >= 8) {
       // let todaysAbc = '|:G2cc dedB|dedB dedB|c8|'.replace(/\s+/g, '')
       let newAccuracy = stringSimilarity.compareTwoStrings(abc.slice(20).replace(/\s+/g, ''), todaysAbc)
-      console.log(abc.slice(20).replace(/\s+/g, '')===todaysAbc)
+      // console.log(abc.slice(20).replace(/\s+/g, '')===todaysAbc)
       newAccuracy = parseFloat(String(newAccuracy).slice(0, 4))
       setAccuracy(newAccuracy)
 
-      console.log('song_id:', song.id)
+      // console.log('song_id:', song.id)
   
       fetch('/guesses', {
         method: 'POST',
@@ -483,7 +483,7 @@ function Daily({ user, streak, setStreak }) {
       .then(data => {
         let newGuesses = [...guesses, data]
         setGuesses(newGuesses)
-        console.log(data)
+        // console.log(data)
         if (newAccuracy === 1) {
           fetch(`/completed/${user.id}/${song.id}`, {
             method: 'PATCH',
@@ -497,7 +497,7 @@ function Daily({ user, streak, setStreak }) {
           })
           .then(res => res.json())
           .then(data => {
-            console.log(data)
+            // console.log(data)
             fetch(`/users/${user.id}/${yesterdayFullDate}`, {
               method: 'PATCH',
               headers: {
@@ -508,7 +508,7 @@ function Daily({ user, streak, setStreak }) {
             })
             .then(res => res.json())
             .then(data => {
-              console.log(data)
+              // console.log(data)
               setStreak(data.streak)
             })
           })

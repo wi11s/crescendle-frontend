@@ -529,3 +529,86 @@ form {
   background-color: #FFD700;
   color: black;
 }
+
+.profile-stats {
+  background-color: #000;
+  position:absolute;
+  top: 25%;
+  left: 55%;
+  right: 20%;
+  bottom: 20%;
+  border-radius: 10px;
+}
+
+.goals {
+  background-color: #000;
+  position:absolute;
+  top: 25%;
+  left: 20%;
+  right: 55%;
+  bottom: 20%;
+  border-radius: 10px;
+}
+
+#new {
+  position: absolute;
+  top: 65%;
+  left: 75%;
+  right: 0%;
+  bottom: 5%;
+}
+
+#new a {
+  border: 2px solid #ffffff;
+  color: rgb(255, 255, 255);
+  padding: 0px;
+  padding-bottom: 15px;
+  padding-left: 2px;
+  position:relative;
+  height:50px;
+  width:50px;
+}
+
+#new a span {
+  font-size: 50px;
+}
+
+#new a::before {
+  background-color: #000000;
+}
+
+#new a::after {
+  background-color: #000000;
+}
+
+.goal-form {
+  border: solid;
+  border-width: 2px;
+  border-color: #000;
+  padding: 15px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border: solid;
+  border-width: 2px;
+  border-color: rgb(255, 255, 255);
+  position: absolute;
+  top: 25%;
+  left: 20%;
+  right: 20%;
+  bottom: 25%;
+}
+
+.label {
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+}
+
+.goal {
+  display: flex;
+  flex-direction: row;
+}
+
+.goal h3 {
+  color: white;
+}
