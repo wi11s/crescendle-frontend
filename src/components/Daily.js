@@ -7,6 +7,7 @@ import Soundfont from 'soundfont-player';
 import stringSimilarity from 'string-similarity';
 import Stats from './Stats';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 // import Abcjs from './Abcjs';
 
@@ -529,6 +530,15 @@ function Daily({ user, streak, setStreak }) {
   }
 
   return (
+    <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.5,
+              ease: [0, 0.71, 0.2, 1.01]
+            }}
+          >
     <div className="daily">
       <div className="game-ui">
         <div className='staff-and-controllers'>
@@ -588,16 +598,16 @@ function Daily({ user, streak, setStreak }) {
       </div>
       {/* <hr className='guesses-hr'></hr> */}
       <div>
-        
-        <div className='outer-previous-guesses'>
-          <div className='previous-guesses'>
-            <PreviousGuesses user={user} guesses={guesses}/>
+          <div className='outer-previous-guesses'>
+            <div className='previous-guesses'>
+              <PreviousGuesses user={user} guesses={guesses}/>
+            </div>
           </div>
-        </div>
-
         <div id="paper2">Hidden</div>
       </div>
+
     </div>
+    </motion.div>
   );
 }
 

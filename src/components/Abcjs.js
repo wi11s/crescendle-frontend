@@ -27,7 +27,7 @@ class Abcjs extends PureComponent {
 
   render() {
     return (
-      <div style={{ width: '100%' }}>
+      <div className='stats-staff' style={{ width: '70%' }}>
         <div id={'abcjs-result-' + this.uniqueNumber} style={{ width: '100%' }} />
       </div>
     )

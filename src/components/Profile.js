@@ -149,9 +149,9 @@ export default function Profile({user, setUser, streak, setStreak}) {
           <form className='goal-form' onSubmit={handleSubmit}>
             <label className='label'>Goal:</label>
             <input className='text-input' onChange={handleContentChange} type='text' name='goal' placeholder='Practice 30 minutes' />
-            <label className='label'>End Date:</label>
+            <label className='label'>Complete by:</label>
             <input className='text-input' onChange={handleDateChange} type='date' name='end_date' />
-            <input className='submit' type='submit' value='Submit' />
+            <input className='submit' type='submit' value='SUBMIT' />
           </form>
         ) : (
           <div>

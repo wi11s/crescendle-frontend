@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 export default function Header({user, setUser}) {
     const [switcher, setSwitcher] = useState(true)
 
-    console.log(user)
+    // console.log(user)
 
     useEffect(() => {
         if (!!user && !!user.name) {
@@ -39,18 +39,17 @@ export default function Header({user, setUser}) {
         navigate("/profile")
     }
 
-    // function handleHomeClick() {
-    //     navigate("/")
-    // }
+    function handleHomeClick() {
+        navigate("/")
+    }
 
   return (
     <nav className="navbar">
         <a className="navbar-brand" href="" onClick={handleHomeClick}>CRESCENDLE</a>
         <div className="navbar-all-items">
-
-            {/* <div onClick={handleHomeClick} className="btn-2 nav-item">
+            <div onClick={handleHomeClick} className="btn-2 nav-item">
                 <a><span>HOME</span></a>
-            </div> */}
+            </div>
 
             <div onClick={handlePracticeClick} className="btn-2 nav-item">
                 <a><span>PRACTICE</span></a>
@@ -68,8 +67,6 @@ export default function Header({user, setUser}) {
                     <a><span>LOG IN</span></a>
                 </div>
             )}
-            
-
         </div>
     </nav>
   )

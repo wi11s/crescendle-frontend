@@ -7,7 +7,7 @@ export default function Login({user, setUser, streak, setStreak}) {
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [id, setId] = useState(null)
-  console.log(user)
+  // console.log(user)
 
   useEffect(() => {
     if (!!user && !!user.streak) {

@@ -27,12 +27,15 @@
 
 .nav-item a {
   font-size: small;
+  gap: 10px;
+  width: 100px;
 }
 
 .navbar-all-items {
   display: flex;
   margin-right: 0%;
   padding-right: 0%;
+  gap: 10px;
   flex-direction: row;
 }
 
@@ -182,6 +185,7 @@ hr {
   color: black;
   cursor: pointer;
   border-color: black;
+  cursor: pointer;
 }
 
 .info {
@@ -203,7 +207,7 @@ hr {
 .previous-guesses {
   display: flex;
   background-color: #000;
-  border: solid 4px black;
+  border: solid 4px #FFD700;
   /*margin-top: 0%;
   margin-left: -10%;
   margin-right: 0%;
@@ -282,7 +286,7 @@ hr {
 
 .btn {
   width: 100px;
-  height: 200px;
+  height: 100;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -323,6 +327,14 @@ span {
 
 .btn a:hover::before {
   transform: scaleY(0);
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn-2 {
+  cursor: pointer;
 }
 
 .btn a::after {
@@ -420,26 +432,38 @@ span {
   background-color: #FFD700;
 }
 
-#logout a span {
-  font-size: 10px;
+#logout a {
+  border-color: rgb(222, 34, 34);
 }
 
-#login a span {
-  font-size: 10px;
+#login a {
+  border-color: rgb(222, 34, 34);
 }
 
 .stats-outer-div {
   margin-top: 2%;
 }
 
+.stats-staff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: auto;
+}
+
 .stats {
   background-color: #000;
   position:absolute;
-  top: 50%;
+  top: 45%;
   left: 30%;
   right: 30%;
-  bottom: 5%;
+  bottom: 10%;
   border-radius: 10px;
+  border: solid;
+  border-width: 2px;
+  border-color: #FFD700;
 }
 
 .stats-h2 {
@@ -503,7 +527,7 @@ form {
 }
 
 .switcher {
-  margin-top: -4%;
+  margin-top: 0%;
   font-size: 12px;
 }
 
@@ -528,6 +552,7 @@ form {
 .submit:hover {
   background-color: #FFD700;
   color: black;
+  cursor: pointer;
 }
 
 .profile-stats {
@@ -538,6 +563,9 @@ form {
   right: 20%;
   bottom: 20%;
   border-radius: 10px;
+  border: solid;
+  border-width: 2px;
+  border-color: #FFD700;
 }
 
 .goals {
@@ -548,19 +576,22 @@ form {
   right: 55%;
   bottom: 20%;
   border-radius: 10px;
+  border: solid;
+  border-width: 2px;
+  border-color: #FFD700;
 }
 
 #new {
   position: absolute;
-  top: 65%;
-  left: 75%;
-  right: 0%;
+  /* top: 65%; */
+  /* left: 75%; */
+  right: 1%;
   bottom: 5%;
 }
 
 #new a {
-  border: 2px solid #ffffff;
-  color: rgb(255, 255, 255);
+  border: 2px solid #FFD700;
+  color: #FFD700;
   padding: 0px;
   padding-bottom: 15px;
   padding-left: 2px;
@@ -611,4 +642,18 @@ form {
 
 .goal h3 {
   color: white;
+}
+
+.practice {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.practice-piano {
+
+}
+
+#practice-paper {
+  
 }
