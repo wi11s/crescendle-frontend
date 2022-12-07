@@ -14,6 +14,7 @@ import { getMouseEventOptions } from '@testing-library/user-event/dist/utils';
 function Practice({user, setUser, streak, setStreak}) {
   // console.log(user)
 
+
   const [midiToNotes, setMidiToNotes] = useState({});
   const [note, setNote] = useState('');
 
@@ -29,6 +30,11 @@ function Practice({user, setUser, streak, setStreak}) {
   const [exercises, setExercises] = useState([]);
   const [todaysAbc, setTodaysAbc] = useState('');
   const [completedScaleCount, setCompletedScaleCount] = useState(0);
+  const [interval, setInterval] = useState(0);
+  const [targetInterval, setTargetInterval] = useState(0);
+  const [intervalStreak, setIntervalStreak] = useState(0);
+  const [showIntervalMessage, setShowIntervalMessage] = useState(false);
+  const [intervalMessage, setIntervalMessage] = useState('');
 
   const [showMessage, setShowMessage] = useState(false);
 
@@ -41,6 +47,8 @@ function Practice({user, setUser, streak, setStreak}) {
   const [space, setSpace] = useState(0);
 
   let abc = `X:1\nM:${timeSignature}\nQ:${bpm}\nK:${key}\n|: ${firstMeasure}| ${secondMeasure}| ${thirdMeasure}|`
+  let abcForUse = todaysAbc
+
 
   useEffect(() => {
     setMidiToNotes({
@@ -84,6 +92,26 @@ function Practice({user, setUser, streak, setStreak}) {
     })
 
   }, [user])
+
+  useEffect(() => {
+    if (user && intervalStreak > user.interval_high_score) {
+    console.log(user.id)
+      fetch(`/high_score/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        },
+        body: JSON.stringify({
+          interval_high_score: intervalStreak
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      })
+    }
+  }, [intervalStreak])
 
   // keyboard
 
@@ -301,10 +329,11 @@ function Practice({user, setUser, streak, setStreak}) {
     setTempoInMs(240000/bpm)
   }
 
+
   let running;
   const targetObj = abcjs.renderAbc(
     "paper2", 
-    todaysAbc
+    abcForUse
   );
 
   function playTarget() {
@@ -362,49 +391,153 @@ function Practice({user, setUser, streak, setStreak}) {
     // console.log(synth.isRunning)
   }
 
+  function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
+
+
+  function intervalFunc() {
+    let firstNote;
+    let secondNote;
+
+    let firstMidinote = randomIntFromInterval(60, 71)
+    firstNote = midiToNotes[firstMidinote]
+
+    let newInterval = randomIntFromInterval(0, 11)
+    setInterval(newInterval)
+
+    secondNote = midiToNotes[firstMidinote+newInterval]
+
+    let intervalAbc = `X:1\nM:4/4\nQ:100\nK:C\n|:${firstNote}2${secondNote}2|`
+
+    console.log(intervalAbc, newInterval)
+    abcForUse = intervalAbc
+
+    setTodaysAbc(intervalAbc)
+  }
+
+  function playInterval() {
+    calculateTempo()
+    
+    const myContext = new AudioContext();
+    running = synth.init({
+      audioContext: myContext,
+      visualObj: targetObj[0],
+      millisecondsPerMeasure: tempoInMs,
+      options: {
+          soundFontUrl: "",
+          pan: [ -0.3, 0.3 ] 
+    }
+    }).then(function (results) {
+      synth.prime()
+    })
+    .then(() => {
+      synth.start();
+    })
+    .catch(function (reason) {
+      console.log(reason)
+    });
+    // console.log(synth.isRunning)
+  }
+
+
+
+  function handleIntervalGuess(number) {
+    if (number === interval) {
+      console.log(true)
+      setIntervalStreak(intervalStreak => intervalStreak + 1)
+      setShowIntervalMessage(true)
+      setIntervalMessage('Great job!')
+    } else {
+      console.log(false, interval, number)
+      setIntervalStreak(0)
+      setShowIntervalMessage(true)
+      setIntervalMessage('Try again!')
+    }
+
+    intervalFunc()
+  }
+
 
   return (
     <div className="practice">
-      <div className='scale-btn'></div>
-      <div className='interval-btn'></div>
-      <div className='scales'>
-        {showMessage ? <p>Great job!</p> : null}
-        <p id="select-message">SELECT A SCALE:</p>
-        <div className='options'>
-          {
-              exercises.map(exercise => {
-                // console.log(exercise)
-                return <Exercise key={exercise.id} setTodaysAbc={setTodaysAbc} exercise={exercise} setSelectedId={setSelectedId} selectedId={selectedId} setFirstNote={setFirstNote} setLastNote={setLastNote} setShowMessage={setShowMessage}/>
-              })
-          }
-        </div>
-
-        <div onClick={playTarget} className="btn practice-target">
-          <a><span>LISTEN</span></a>
-        </div>
-
-        <div id="practice-paper"></div>
-        
-        <Piano
-          className="react-piano practice-piano"
-          onPlayNoteInput={(midiNumber) => {
-            handlePress(midiNumber);
-          }}
-          noteRange={{ first: firstNote, last: lastNote }}
-          playNote={(midiNumber) => {
-            Soundfont.instrument(new AudioContext(), 'acoustic_grand_piano').then(function (piano) {
-              piano.play(midiNumber, 0, { duration: 0.5, gain: 10 });
-            })
-          }}
-          stopNote={(midiNumber) => {
-            // Stop playing a given note - see notes below
-          }}
-          width={650}
-          keyboardShortcuts={keyboardShortcuts}
-        />
-        {/* <p>accuracy: {accuracy}, number of scales completed: {completedScaleCount}</p> */}
-        
+      <div className='tabs'>
+        <div onClick={() => setSelectedTab(true)} className={selectedTab? 'scale-btn tab-selected' : 'scale-btn'}>SCALES</div>
+        <div onClick={() => {
+          setSelectedTab(false)
+          setTodaysAbc('')
+          intervalFunc()
+          }} className={selectedTab? 'interval-btn ' : 'interval-btn tab-selected'}>INTERVALS</div>
       </div>
+      {selectedTab ? (
+        <div className='scales'>
+          {showMessage ? <h2>Great job!</h2> : <p id="select-message">SELECT A SCALE:</p>}
+          
+          <div className='options'>
+            {
+                exercises.map(exercise => {
+                  // console.log(exercise)
+                  return <Exercise key={exercise.id} setTodaysAbc={setTodaysAbc} exercise={exercise} setSelectedId={setSelectedId} selectedId={selectedId} setFirstNote={setFirstNote} setLastNote={setLastNote} setShowMessage={setShowMessage}/>
+                })
+            }
+          </div>
+
+          <div onClick={playTarget} className="btn practice-target">
+            <a><span>LISTEN</span></a>
+          </div>
+
+          <div id="practice-paper"></div>
+
+          <p className='scale-info'>Accuracy: {accuracy*100}%  |  Number of Scales Completed: {completedScaleCount}</p>
+          
+          <Piano
+            className="react-piano practice-piano"
+            onPlayNoteInput={(midiNumber) => {
+              handlePress(midiNumber);
+            }}
+            noteRange={{ first: firstNote, last: lastNote }}
+            playNote={(midiNumber) => {
+              Soundfont.instrument(new AudioContext(), 'acoustic_grand_piano').then(function (piano) {
+                piano.play(midiNumber, 0, { duration: 0.5, gain: 10 });
+              })
+            }}
+            stopNote={(midiNumber) => {
+              // Stop playing a given note - see notes below
+            }}
+            width={650}
+            keyboardShortcuts={keyboardShortcuts}
+          />
+          
+          
+        </div>
+      ) : (
+        <div className='intervals'>
+          <div onClick={playInterval} className="btn interval-target">
+            <a><span>RANDOM INTERVAL</span></a>
+          </div>
+          <h2 id='interval-guess-title'>Guess:</h2>
+          <div className='interval-guesses'>
+            <button onClick={() => {handleIntervalGuess(0)}}>unison</button>
+            <button onClick={() => {handleIntervalGuess(1)}}>minor second</button>
+            <button onClick={() => {handleIntervalGuess(2)}}>major second</button>
+            <button onClick={() => {handleIntervalGuess(3)}}>minor third</button>
+            <button onClick={() => {handleIntervalGuess(4)}}>major third</button>
+            <button onClick={() => {handleIntervalGuess(5)}}>perfect fourth</button>
+            <button onClick={() => {handleIntervalGuess(6)}}>tritone</button>
+            <button onClick={() => {handleIntervalGuess(7)}}>perfect fifth</button>
+            <button onClick={() => {handleIntervalGuess(8)}}>minor sixth</button>
+            <button onClick={() => {handleIntervalGuess(9)}}>major sixth</button>
+            <button onClick={() => {handleIntervalGuess(10)}}>minor seventh</button>
+            <button onClick={() => {handleIntervalGuess(11)}}>major seventh</button>
+            <button onClick={() => {handleIntervalGuess(12)}}>octave</button>
+            <div id='info'>
+              <h2>streak: {intervalStreak} |</h2>
+              <h2>high score: {user.interval_high_score}</h2>
+            </div>
+          </div>
+        </div>
+      )}
       <div id="paper2">Hidden</div>
     </div>
   );

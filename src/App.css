@@ -89,7 +89,7 @@ hr {
 .react-piano {
   display: flex;
   margin: auto;
-  height: 10%;
+  height: 50%;
 }
 
 .noteTypes {
@@ -593,7 +593,7 @@ form {
   border: 2px solid #FFD700;
   color: #FFD700;
   padding: 0px;
-  padding-bottom: 15px;
+  padding-bottom: 15vw;
   padding-left: 2px;
   position:relative;
   height:50px;
@@ -645,22 +645,45 @@ form {
 }
 
 .practice {
-
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
 }
 
 .scales {
-  position:absolute;
-  top: 20%;
-  left: 20%;
-  right: 20%;
-  bottom: 5%;
-
+  background-color: #fff;
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
   border: solid 2px #000;
   padding: 20px;
+
+  position:absolute;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  bottom: 5%;
+
+  overflow: hidden;
+}
+
+.intervals {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  border: solid 2px #000;
+  padding: 20px;
+
+  position:absolute;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  bottom: 5%;
+
+  overflow: hidden;
 }
 
 .practice-piano {
@@ -679,7 +702,7 @@ form {
 
 .options {
   position:absolute;
-  top: 10%;
+  top: 12%;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -719,4 +742,85 @@ form {
 #select-message {
   position: absolute;
   top: 2%;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+}
+
+.scale-btn {
+  color: rgb(0, 0, 0);
+  border: solid 2px #000; 
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 8%;
+}
+
+.interval-btn {
+  color: rgb(0, 0, 0);
+  border: solid 2px #000; 
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 8%;
+}
+
+.tab-selected {
+  background-color: black;
+  color: #FFD700;
+}
+
+.scale-info {
+  position:absolute;
+  top: 53%;
+}
+
+.interval-guesses {
+  position:absolute;
+  top: 35%;
+}
+
+.interval-target {
+  position:absolute;
+  top: 6%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+#interval-guess-title {
+  position: absolute;
+  top: 20%
+}
+
+.interval-guesses button {
+  border: solid 2px #000;
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 10px
+}
+
+.interval-guesses button:hover {
+  background-color: #FFD700;
+  color: #000;
+}
+
+.intervals #info {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
 }

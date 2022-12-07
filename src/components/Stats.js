@@ -24,7 +24,7 @@ export default function Stats({abc, fullDate, numberOfPlays, guesses, streak}) {
 
   return (
     <div className='stats-outer-div'>
-        <h2>{numberOfPlays===1 ? `Well Done! You solved today's Crescendle in ${guesses} guess and with ${numberOfPlays} listen`: `Well Done! You solved today's Crescendle in ${guesses} guesses and with ${numberOfPlays} listens`}</h2>
+        <h2>{numberOfPlays===1 && guesses === 1 ? `Well Done! You solved today's Crescendle in ${guesses} guess and with ${numberOfPlays} listen`: `Well Done! You solved today's Crescendle in ${guesses} guesses and with ${numberOfPlays} listens`}</h2>
         <Abcjs
             abcNotation={
                 abc

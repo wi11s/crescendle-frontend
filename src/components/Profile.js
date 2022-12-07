@@ -10,10 +10,12 @@ export default function Profile({user, setUser, streak, setStreak}) {
   const [content, setContent] = useState('')
   const [endDate, setEndDate] = useState('')
   const [complete, setComplete] = useState(true)
+  const [intervalHighScore, setIntervalHighScore] = useState(0)
 
   useEffect(() => {
     if (user && user.name) {
       setStreak(user.streak)
+      setIntervalHighScore(user.interval_high_score)
 
       fetch(`/user_stats/${user.id}`, {
         method: 'GET',
@@ -141,6 +143,7 @@ export default function Profile({user, setUser, streak, setStreak}) {
         <h3 className='stats-h3'>Streak: {streak}</h3>
         <h3 className='stats-h3'>Mean listens: {meanListens}</h3>
         <h3 className='stats-h3'>Mean guesses: {meanGuesses}</h3>
+        <h3 className='stats-h3'>Interval High Score: {intervalHighScore}</h3>
       </div>
       <div className='goals'>
         <h2 className='stats-h2'>PRACTICE GOALS</h2>

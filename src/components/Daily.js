@@ -92,7 +92,7 @@ function Daily({ user, streak, setStreak }) {
         })
         .then((r) => r.json())
         .then(data => {
-          // console.log(data)
+          console.log(data)
           if (data !== null) {
             setNumberOfPlays(data['number_of_plays'])
             setComplete(data.completed)
@@ -571,7 +571,7 @@ function Daily({ user, streak, setStreak }) {
         </div>
 
         <div className="info">
-          <h3>ACCURACY: {accuracy}</h3>
+          <h3>ACCURACY: {accuracy*100}%</h3>
           <h3>NUMBER OF LISTENS: {numberOfPlays}</h3>
         </div>
 
