@@ -5,6 +5,8 @@ import 'react-piano/dist/styles.css';
 import Login from './Login';
 import Exercise from './Exercise';
 
+import stringSimilarity from 'string-similarity';
+
 import abcjs from 'abcjs';
 import { getMouseEventOptions } from '@testing-library/user-event/dist/utils';
 
@@ -26,6 +28,15 @@ function Practice({user, setUser, streak, setStreak}) {
   const [accuracy, setAccuracy] = useState(0);
   const [exercises, setExercises] = useState([]);
   const [todaysAbc, setTodaysAbc] = useState('');
+  const [completedScaleCount, setCompletedScaleCount] = useState(0);
+
+  const [showMessage, setShowMessage] = useState(false);
+
+  const [firstNote, setFirstNote] = useState(MidiNumbers.fromNote('c4'));
+  const [lastNote, setLastNote] = useState(MidiNumbers.fromNote('f5'));
+
+  const [selectedId, setSelectedId] = useState(null);
+  const [selectedTab, setSelectedTab] = useState(true);
 
   const [space, setSpace] = useState(0);
 
@@ -51,11 +62,14 @@ function Practice({user, setUser, streak, setStreak}) {
       75: '^d',
       76: 'e',
       77: 'f',
+      78: '^f',
+      79: 'g',
+      80: '^g',
+      81: 'a',
+      82: '^a',
+      83: 'b'
     })
     // console.log(midiToNotes)
-  }, [user])
-
-  useEffect(() => {
     fetch('/practices', {
       method: 'GET',
       headers: {
@@ -68,12 +82,11 @@ function Practice({user, setUser, streak, setStreak}) {
       // console.log(data)
       setExercises(data)
     })
-  }, [])
+
+  }, [user])
 
   // keyboard
 
-  const firstNote = MidiNumbers.fromNote('c4');
-  const lastNote = MidiNumbers.fromNote('f5');
   const keyboardShortcuts = KeyboardShortcuts.create({
     firstNote: firstNote,
     lastNote: lastNote,
@@ -198,16 +211,9 @@ function Practice({user, setUser, streak, setStreak}) {
     let onThird = false
     // let onFourth = false
 
-    console.log(space)
+    // console.log(space)
     // complete
-    if (space >= 8) {
-      setFirstMeasure(``)
-      setSecondMeasure('')
-      setSpace(0)
-      
-      onFirst = true
-      return
-    }
+
 
     if (space>=0 && space<3.5) {
       setNoteType('')
@@ -232,7 +238,7 @@ function Practice({user, setUser, streak, setStreak}) {
       remainingSpace = 12 - spaceForUse
     }
 
-    console.log(midiNumber, midiToNotes[midiNumber], midiToNotes)
+    // console.log(midiNumber, midiToNotes[midiNumber], midiToNotes)
 
     if (moveForward) {
       if ((Number.isInteger(space) && (space%2)==0) || (Number.isInteger(space) && noteType==='/')) {
@@ -258,6 +264,30 @@ function Practice({user, setUser, streak, setStreak}) {
           setThirdMeasure(updatedMeasure);
         }
       }
+    }
+
+    console.log(midiToNotes[midiNumber])
+
+    if (space >= 8) {
+      setFirstMeasure(``)
+      setSecondMeasure('')
+      setThirdMeasure('')
+      setSpace(0)
+      let compare = abc.slice(20, abc.length-1).replace(/\s+/g, '')+midiToNotes[midiNumber]+'2|'
+      console.log(compare, todaysAbc.slice(20).replace(/\s+/g, ''))
+
+      let newAccuracy = stringSimilarity.compareTwoStrings(compare, todaysAbc.slice(20).replace(/\s+/g, ''))
+      // console.log(abc.slice(20).replace(/\s+/g, '')===todaysAbc)
+      newAccuracy = parseFloat(String(newAccuracy).slice(0, 4))
+      setAccuracy(newAccuracy)
+
+      if (newAccuracy === 1) {
+        setCompletedScaleCount(completedScaleCount => completedScaleCount + 1)
+        setShowMessage(true)
+      }
+      
+      onFirst = true
+      return
     }
   }
 
@@ -332,40 +362,49 @@ function Practice({user, setUser, streak, setStreak}) {
     // console.log(synth.isRunning)
   }
 
+
   return (
     <div className="practice">
-      <div className='options'>
-        {
-            exercises.map(exercise => {
-              // console.log(exercise)
-              return <Exercise key={exercise.id} setTodaysAbc={setTodaysAbc} exercise={exercise}/>
+      <div className='scale-btn'></div>
+      <div className='interval-btn'></div>
+      <div className='scales'>
+        {showMessage ? <p>Great job!</p> : null}
+        <p id="select-message">SELECT A SCALE:</p>
+        <div className='options'>
+          {
+              exercises.map(exercise => {
+                // console.log(exercise)
+                return <Exercise key={exercise.id} setTodaysAbc={setTodaysAbc} exercise={exercise} setSelectedId={setSelectedId} selectedId={selectedId} setFirstNote={setFirstNote} setLastNote={setLastNote} setShowMessage={setShowMessage}/>
+              })
+          }
+        </div>
+
+        <div onClick={playTarget} className="btn practice-target">
+          <a><span>LISTEN</span></a>
+        </div>
+
+        <div id="practice-paper"></div>
+        
+        <Piano
+          className="react-piano practice-piano"
+          onPlayNoteInput={(midiNumber) => {
+            handlePress(midiNumber);
+          }}
+          noteRange={{ first: firstNote, last: lastNote }}
+          playNote={(midiNumber) => {
+            Soundfont.instrument(new AudioContext(), 'acoustic_grand_piano').then(function (piano) {
+              piano.play(midiNumber, 0, { duration: 0.5, gain: 10 });
             })
-        }
+          }}
+          stopNote={(midiNumber) => {
+            // Stop playing a given note - see notes below
+          }}
+          width={650}
+          keyboardShortcuts={keyboardShortcuts}
+        />
+        {/* <p>accuracy: {accuracy}, number of scales completed: {completedScaleCount}</p> */}
+        
       </div>
-
-      <div onClick={playTarget} className="btn">
-        <a><span>TARGET</span></a>
-      </div>
-
-      <div id="practice-paper"></div>
-      
-      <Piano
-        className="react-piano practice-piano"
-        onPlayNoteInput={(midiNumber) => {
-          handlePress(midiNumber);
-        }}
-        noteRange={{ first: firstNote, last: lastNote }}
-        playNote={(midiNumber) => {
-          Soundfont.instrument(new AudioContext(), 'acoustic_grand_piano').then(function (piano) {
-            piano.play(midiNumber, 0, { duration: 0.5, gain: 10 });
-          })
-        }}
-        stopNote={(midiNumber) => {
-          // Stop playing a given note - see notes below
-        }}
-        width={650}
-        keyboardShortcuts={keyboardShortcuts}
-      />
       <div id="paper2">Hidden</div>
     </div>
   );
