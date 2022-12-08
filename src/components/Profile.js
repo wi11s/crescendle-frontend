@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import Login from './Login';
+import { motion } from 'framer-motion'
 
 
 export default function Profile({user, setUser, streak, setStreak}) {
@@ -136,7 +137,18 @@ export default function Profile({user, setUser, streak, setStreak}) {
   }
 
   return (
+
     <div>
+      {/* <motion.div
+        className="box"
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          duration: 0.8,
+          delay: 0,
+          ease: [0, 0.71, 0.2, 1.01]
+        }}
+      > */}
       <div className="profile-stats">
         <h2 className='stats-h2'>PERSONAL STATS</h2>
         <hr className='stats-hr'></hr>
@@ -180,6 +192,7 @@ export default function Profile({user, setUser, streak, setStreak}) {
           </div>
         ) }
       </div>
+      {/* </motion.div> */}
     </div>
   )
 }

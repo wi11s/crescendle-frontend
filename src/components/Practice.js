@@ -321,7 +321,8 @@ function Practice({user, setUser, streak, setStreak}) {
 
   const visualObj = abcjs.renderAbc(
     "practice-paper", 
-    abc
+    abc, 
+    { responsive: "resize" }
   );
   const synth = new abcjs.synth.CreateSynth();
 
@@ -453,8 +454,9 @@ function Practice({user, setUser, streak, setStreak}) {
       console.log(false, interval, number)
       setIntervalStreak(0)
       setShowIntervalMessage(true)
-      setIntervalMessage('Try again!')
+      setIntervalMessage('Oop! Try the next interval!')
     }
+    console.log(intervalStreak>user.interval_high_score)
 
     intervalFunc()
   }
@@ -491,23 +493,24 @@ function Practice({user, setUser, streak, setStreak}) {
 
           <p className='scale-info'>Accuracy: {accuracy*100}%  |  Number of Scales Completed: {completedScaleCount}</p>
           
-          <Piano
-            className="react-piano practice-piano"
-            onPlayNoteInput={(midiNumber) => {
-              handlePress(midiNumber);
-            }}
-            noteRange={{ first: firstNote, last: lastNote }}
-            playNote={(midiNumber) => {
-              Soundfont.instrument(new AudioContext(), 'acoustic_grand_piano').then(function (piano) {
-                piano.play(midiNumber, 0, { duration: 0.5, gain: 10 });
-              })
-            }}
-            stopNote={(midiNumber) => {
-              // Stop playing a given note - see notes below
-            }}
-            width={650}
-            keyboardShortcuts={keyboardShortcuts}
-          />
+          <div className='practice-piano-outer'>
+            <Piano
+              className="react-piano practice-piano"
+              onPlayNoteInput={(midiNumber) => {
+                handlePress(midiNumber);
+              }}
+              noteRange={{ first: firstNote, last: lastNote }}
+              playNote={(midiNumber) => {
+                Soundfont.instrument(new AudioContext(), 'acoustic_grand_piano').then(function (piano) {
+                  piano.play(midiNumber, 0, { duration: 0.5, gain: 10 });
+                })
+              }}
+              stopNote={(midiNumber) => {
+                // Stop playing a given note - see notes below
+              }}
+              keyboardShortcuts={keyboardShortcuts}
+            />
+          </div>
           
           
         </div>
@@ -516,6 +519,7 @@ function Practice({user, setUser, streak, setStreak}) {
           <div onClick={playInterval} className="btn interval-target">
             <a><span>RANDOM INTERVAL</span></a>
           </div>
+          {/* <h3>{intervalMessage}</h3> */}
           <h2 id='interval-guess-title'>Guess:</h2>
           <div className='interval-guesses'>
             <button onClick={() => {handleIntervalGuess(0)}}>unison</button>
@@ -532,8 +536,8 @@ function Practice({user, setUser, streak, setStreak}) {
             <button onClick={() => {handleIntervalGuess(11)}}>major seventh</button>
             <button onClick={() => {handleIntervalGuess(12)}}>octave</button>
             <div id='info'>
-              <h2>streak: {intervalStreak} |</h2>
-              <h2>high score: {user.interval_high_score}</h2>
+              <h2>streak: {intervalStreak} {intervalMessage}|</h2>
+              <h2>high score: {parseInt(intervalStreak)>parseInt(user.interval_high_score) ? intervalStreak : user.interval_high_score}</h2>
             </div>
           </div>
         </div>

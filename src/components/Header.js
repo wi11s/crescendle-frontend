@@ -45,6 +45,7 @@ export default function Header({user, setUser}) {
 
   return (
     <nav className="navbar">
+        
         <a className="navbar-brand" href="" onClick={handleHomeClick}>CRESCENDLE</a>
         <div className="navbar-all-items">
             <div onClick={handleHomeClick} className="btn-2 nav-item">

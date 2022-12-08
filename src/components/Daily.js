@@ -288,22 +288,6 @@ function Daily({ user, streak, setStreak }) {
       }
     }
 
-    // let lastNote;
-
-    // document.querySelectorAll('path').forEach((path) => {
-    //   if (path.className.baseVal === 'abcjs-stem') {
-    //     // path.parentElement.className = 
-        
-    //     // console.log(typeof path.parentElement)
-    //     // setVisualNotes(path.parentElement)
-    //     // path.parentElement.id = ''
-    //     lastNote = path.parentElement
-    //   }
-    // })
-
-    // lastNote.id = `midi${midiNumber}`
-    // console.log(lastNote.parentElement)
-
   }
 
   // audio
@@ -315,13 +299,8 @@ function Daily({ user, streak, setStreak }) {
 
   const visualObj = abcjs.renderAbc(
     "paper", 
-    abc, 
-    { dragging: true, 
-      clickListener: function (ev) {
-        // dragging function
-        // console.log(ev)
-      }
-    }
+    abc,
+    { responsive: "resize" }
   );
 
   function calculateTempo() {
@@ -369,13 +348,7 @@ function Daily({ user, streak, setStreak }) {
 
   const targetObj = abcjs.renderAbc(
     "paper2", 
-    todaysAbc, 
-    { dragging: true, 
-      clickListener: function (ev) {
-        // dragging function
-        // console.log(ev)
-      }
-    }
+    todaysAbc
   );
   
   function playTarget() {
@@ -530,15 +503,15 @@ function Daily({ user, streak, setStreak }) {
   }
 
   return (
-    <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.5,
-              ease: [0, 0.71, 0.2, 1.01]
-            }}
-          >
+    // <motion.div
+    //         initial={{ opacity: 0, scale: 0.5 }}
+    //         animate={{ opacity: 1, scale: 1 }}
+    //         transition={{
+    //           duration: 1.8,
+    //           delay: 0,
+    //           ease: [0, 0.71, 0.2, 1.01]
+    //         }}
+    //       >
     <div className="daily">
       <div className="game-ui">
         <div className='staff-and-controllers'>
@@ -553,7 +526,7 @@ function Daily({ user, streak, setStreak }) {
               <div onClick={() => synth.stop()} className="btn">
                 <a><span>STOP</span></a>
               </div>
-              <div onClick={playTarget} className="btn">
+              <div onClick={playTarget} className="btn-2 ">
                 <a><span>TARGET</span></a>
               </div>
             </div>
@@ -591,7 +564,7 @@ function Daily({ user, streak, setStreak }) {
             stopNote={(midiNumber) => {
               // Stop playing a given note - see notes below
             }}
-            width={650}
+            // width={650}
             keyboardShortcuts={keyboardShortcuts}
           />
         </div>
@@ -607,7 +580,7 @@ function Daily({ user, streak, setStreak }) {
       </div>
 
     </div>
-    </motion.div>
+    // </motion.div>
   );
 }
 

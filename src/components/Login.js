@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import { motion } from 'framer-motion'
 
 export default function Login({user, setUser, streak, setStreak}) {
   const [switcher, setSwitcher] = useState(true)
@@ -48,7 +49,9 @@ export default function Login({user, setUser, streak, setStreak}) {
       return
     }
 
-    fetch(`/users_with_data/${streak}/${id}`, {
+    console.log(user.id, streak)
+
+    fetch(`/users_with_data/${streak}/${user.id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -72,7 +75,18 @@ export default function Login({user, setUser, streak, setStreak}) {
   }
 
   return (
+    <motion.div
+    className="box"
+    initial={{ opacity: 0, scale: 0.6 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{
+      duration: 0.8,
+      delay: 0,
+      ease: [0, 0.71, 0.2, 1.01]
+    }}
+  >
     <div className="form">
+
 
       {switcher ? (
         <form onSubmit={handleLogin} className='login'>
@@ -95,5 +109,7 @@ export default function Login({user, setUser, streak, setStreak}) {
         </div>
 
     </div>
+    </motion.div>
+
   )
 }
