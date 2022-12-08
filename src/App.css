@@ -646,9 +646,9 @@ form {
   border: solid;
   border-width: 2px;
   border-color: #000;
-  padding: 15px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: .01vw;
+  padding-top: .01vw;
+  padding-bottom: .01vw;
   border: solid;
   border-width: 2px;
   border-color: rgb(255, 255, 255);
@@ -797,7 +797,7 @@ form {
   border: solid 2px #000; 
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  padding: 1vw 1vw;
   font-size: 17px;
   width: 8%;
 }
@@ -854,4 +854,9 @@ form {
   gap: 10px;
   justify-content: center;
   align-items: center;
+}
+
+.goal-btn {
+  height: 3vw;
+  width: 5vw;
 }

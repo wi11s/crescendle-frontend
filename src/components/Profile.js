@@ -183,11 +183,11 @@ export default function Profile({user, setUser, streak, setStreak}) {
         ) }
 
         {showForm ? (
-          <div onClick={handleClick} className="btn" id='new'>
+          <div onClick={handleClick} className="btn goal-btn" id='new'>
             <a><span>-</span></a>
           </div>
         ) : (
-          <div onClick={handleClick} className="btn" id='new'>
+          <div onClick={handleClick} className="btn goal-btn" id='new'>
             <a><span>+</span></a>
           </div>
         ) }

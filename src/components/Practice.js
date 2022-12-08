@@ -442,6 +442,22 @@ function Practice({user, setUser, streak, setStreak}) {
     // console.log(synth.isRunning)
   }
 
+  let numberToInterval = {
+    0: 'Unison',
+    1: 'Minor 2nd',
+    2: 'Major 2nd',
+    3: 'Minor 3rd',
+    4: 'Major 3rd',
+    5: 'Perfect 4th',
+    6: 'Tritone',
+    7: 'Perfect 5th',
+    8: 'Minor 6th',
+    9: 'Major 6th',
+    10: 'Minor 7th',
+    11: 'Major 7th',
+    12: 'Octave'
+  }
+
 
 
   function handleIntervalGuess(number) {
@@ -454,9 +470,10 @@ function Practice({user, setUser, streak, setStreak}) {
       console.log(false, interval, number)
       setIntervalStreak(0)
       setShowIntervalMessage(true)
-      setIntervalMessage('Oop! Try the next interval!')
+      setIntervalMessage(`Not quite, it was ${numberToInterval[number]}! Try the next interval!`)
     }
     console.log(intervalStreak>user.interval_high_score)
+
 
     intervalFunc()
   }
@@ -536,7 +553,7 @@ function Practice({user, setUser, streak, setStreak}) {
             <button onClick={() => {handleIntervalGuess(11)}}>major seventh</button>
             <button onClick={() => {handleIntervalGuess(12)}}>octave</button>
             <div id='info'>
-              <h2>streak: {intervalStreak} {intervalMessage}|</h2>
+              <h2>streak: {intervalStreak} | {intervalMessage} |</h2>
               <h2>high score: {parseInt(intervalStreak)>parseInt(user.interval_high_score) ? intervalStreak : user.interval_high_score}</h2>
             </div>
           </div>
