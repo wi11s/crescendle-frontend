@@ -54,7 +54,7 @@ function Daily({ user, streak, setStreak }) {
   }
   let year = date.getFullYear();
   let fullDate = `${month}${day}${year}`;
-  // let fullDate = '12082022'
+  // let fullDate = '12092022'
 
   useEffect(() => {
     if (user) {
@@ -425,7 +425,7 @@ function Daily({ user, streak, setStreak }) {
   }
   let yesterdayYear = yesterday.getFullYear();
   let yesterdayFullDate = `${yesterdayMonth}${yesterdayDay}${yesterdayYear}`
-  // let yesterdayFullDate = '12072022'
+  // let yesterdayFullDate = '12082022'
 
   // console.log(yesterdayFullDate)
 
@@ -472,7 +472,7 @@ function Daily({ user, streak, setStreak }) {
           .then(res => res.json())
           .then(data => {
             // console.log(data)
-            fetch(`/users/${user.id}/${yesterdayFullDate}`, {
+            fetch(`/streak/${user.id}/${yesterdayFullDate}`, {
               method: 'PATCH',
               headers: {
                 'Content-Type': 'application/json',
@@ -482,7 +482,7 @@ function Daily({ user, streak, setStreak }) {
             })
             .then(res => res.json())
             .then(data => {
-              // console.log(data)
+              console.log(data)
               setStreak(data.streak)
             })
           })
@@ -514,6 +514,7 @@ function Daily({ user, streak, setStreak }) {
     //       >
     <div className="daily">
       <div className="game-ui">
+        <h3>Listen to the Target, then guess the melody!</h3>
         <div className='staff-and-controllers'>
 
           <div className="controllers">

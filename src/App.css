@@ -63,6 +63,14 @@
   bottom: 2%;
 }
 
+.game-ui h3 {
+  font-size: 1.4rem;
+  font-family: 'Lora', serif;
+  color: black;
+  margin-top: 0%;
+  margin-bottom: 1%;
+}
+
 .guesses-hr {
   border-left: 1px solid #ffffff;
   margin-top: 0%;
@@ -128,6 +136,10 @@ hr {
   border-color: white !important;
   background-color: black !important;
   color: white !important;
+}
+
+.btnUnselected:hover {
+  background-color:#FFD700;
 }
 
 .start-stop {
@@ -626,8 +638,8 @@ form {
   padding-bottom: 15px;
   padding-left: 2px;
   position:relative;
-  height:50px;
-  width:50px;
+  height:3vw;
+  width:3vw;
 }
 
 #new a span {
@@ -850,8 +862,8 @@ form {
 
 .intervals #info {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
+  flex-direction: column;
+  gap: 0vw;
   justify-content: center;
   align-items: center;
 }

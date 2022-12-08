@@ -405,7 +405,7 @@ function Practice({user, setUser, streak, setStreak}) {
     let firstMidinote = randomIntFromInterval(60, 71)
     firstNote = midiToNotes[firstMidinote]
 
-    let newInterval = randomIntFromInterval(0, 11)
+    let newInterval = randomIntFromInterval(0, 12)
     setInterval(newInterval)
 
     secondNote = midiToNotes[firstMidinote+newInterval]
@@ -470,7 +470,7 @@ function Practice({user, setUser, streak, setStreak}) {
       console.log(false, interval, number)
       setIntervalStreak(0)
       setShowIntervalMessage(true)
-      setIntervalMessage(`Not quite, it was ${numberToInterval[number]}! Try the next interval!`)
+      setIntervalMessage(`Not quite, it was ${numberToInterval[interval]}! Try the next interval!`)
     }
     console.log(intervalStreak>user.interval_high_score)
 
@@ -553,8 +553,9 @@ function Practice({user, setUser, streak, setStreak}) {
             <button onClick={() => {handleIntervalGuess(11)}}>major seventh</button>
             <button onClick={() => {handleIntervalGuess(12)}}>octave</button>
             <div id='info'>
-              <h2>streak: {intervalStreak} | {intervalMessage} |</h2>
-              <h2>high score: {parseInt(intervalStreak)>parseInt(user.interval_high_score) ? intervalStreak : user.interval_high_score}</h2>
+              <h2>Streak: {intervalStreak}</h2>
+              <h2>{intervalMessage}</h2>
+              <h2>High Score: {parseInt(intervalStreak)>parseInt(user.interval_high_score) ? intervalStreak : user.interval_high_score}</h2>
             </div>
           </div>
         </div>
