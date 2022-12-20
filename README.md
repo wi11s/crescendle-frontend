@@ -1,70 +1,13 @@
-# Getting Started with Create React App
+# Welcome to the Crescendle!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This app is built using React on the frontend and Ruby on Rails on the backend. It allows users to test their musical skills by solving daily melody puzzles using an on-screen piano and sheet music. The melodies are two measures, and the goal is to write the sheet music while listening to the target melody as few times as possible. Each submition will give you a percentage score based on how accurate your guess was to the target melody.
 
-## Available Scripts
+While user statistics will persist without creating an account, to access extra features users can safely sign up and log in. Password encryption is done with bcrypt.
 
-In the project directory, you can run:
+The app utilizes the abcjs library to display musical notation and the React Piano library to provide a virtual piano for the user to play on.
 
-### `npm start`
+In addition to the daily puzzle feature, the app also provides a practice section where users can hone their skills by playing scales and identifying musical intervals. Choose from a list of major scales, or train your ear by listening to randomly generated intervals and built up a streak by guessing multiple in a row. This is great for beginner and intermediate musicians.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Users can track their personal progress and view overall statistics for the app. If you have existing statistics, and decide to create an account, the existing stats will be automatically transferred to your new account. 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+I hope you enjoy using the Crescendle and that it helps you improve in your musical endeavors! 
