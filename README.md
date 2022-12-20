@@ -1,4 +1,4 @@
-# Welcome to the Crescendle!
+# Welcome to the Crescendle frontend!
 
 This app is built using React on the frontend and Ruby on Rails on the backend. It allows users to test their musical skills by solving daily melody puzzles using an on-screen piano and sheet music. The melodies are two measures, and the goal is to write the sheet music while listening to the target melody as few times as possible. Each submition will give you a percentage score based on how accurate your guess was to the target melody.
 
